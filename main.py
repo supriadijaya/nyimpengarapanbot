@@ -62,7 +62,7 @@ async def filter_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
         schedule_deletion(msg)
         return
     keyword = args[0].lower()
-    response = " ".join(args[1:])
+    response = update.message.text.split(None, 2)[2]  # Ambil seluruh teks setelah keyword
     filters_data[keyword] = response
     msg = await update.message.reply_text(f"Filter untuk '{keyword}' disimpan!")
     schedule_deletion(msg)
@@ -87,7 +87,7 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
     text = update.message.text.lower()
     for keyword, response in filters_data.items():
         if keyword in text:
-            msg = await update.message.reply_text(response)
+            msg = await update.message.reply_text(response, parse_mode="HTML", disable_web_page_preview=True)
             schedule_deletion(msg)
             break
 
